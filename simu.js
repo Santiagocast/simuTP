@@ -19,7 +19,7 @@
   initializeAllVars();
   for (t; t < totalTime; t++) {
     minTPL = searchMinHilo(loteThreads);
-    if (tpe <= minTPL.tProx) {
+    if (tpe <= minTPL.tiempoComprometido) {
       procesarComprobantes();
     } else {
       procesarLotes();

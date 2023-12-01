@@ -8,7 +8,7 @@ function procesarComprobantes(){
         pxc = randomPaginasPorComprobantes();
         d= obtenerTiempoDeEscaneo(pxc);
         minTCE = searchMinHilo(scannerThreads);
-        if ( minTCE.tProx > t+ minGoogleErr){ // estan caidos los 5 hilos
+        if ( minTCE.tiempoComprometido > t+ minGoogleErr){ // estan caidos los 5 hilos
             //Buscar menor TCDW j  
             //TODO ver con los chicos
         }else{
@@ -20,10 +20,10 @@ function procesarComprobantes(){
 }
 
 function asignarNuevoTiempoComprometido(hilo, d){
-    if (t< hilo.tProx){
-        hilo.tProx += d;
+    if (t< hilo.tiempoComprometido){
+        hilo.tiempoComprometido += d;
     }else{
-        hilo.tProx = t + d;
+        hilo.tiempoComprometido = t + d;
     }
 
 }
