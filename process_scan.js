@@ -4,19 +4,25 @@ function procesarComprobantes(){
     tpe = trc + t;
 
     ccr = randomCantidadComprobantesRecolectados();
+    totalComprobantes = totalComprobantes + ccr;
+
     for (i = 0; i < ccr; i++) {
         pxc = randomPaginasPorComprobantes();
-        d= obtenerTiempoDeEscaneo(pxc);
-        minTCE = searchMinHilo(scannerThreads);
-        if ( minTCE.tiempoComprometido > t+ minGoogleErr){ // estan caidos los 5 hilos
-            //Buscar menor TCDW j  
-            //TODO ver con los chicos
+        let d= obtenerTiempoDeEscaneo(pxc);
+        sumDemora += d;
+        let minIndex = searchMinHilo(scannerThreads);
+        if (scannerThreads[minIndex].tiempoComprometido > t+ minGoogleErr){ // estan caidos los 5 hilos
+            let minTCDW = searchMinHilo(loteThreads);
+            if (scannerThreads[minIndex].tiempoComprometido <= loteThreads[minTCDW].tiempoComprometido){
+                asignarNuevoTiempoComprometido(scannerThreads[minIndex], d);
+            }else{
+                TPL[minTCDW] += d;
+            }
         }else{
-            asignarNuevoTiempoComprometido(minTCE, d);
+            asignarNuevoTiempoComprometido(scannerThreads[minIndex], d);
         }
+        costo += costoCloudFunction
     }
-
-
 }
 
 function asignarNuevoTiempoComprometido(hilo, d){
@@ -34,18 +40,27 @@ function obtenerTiempoDeEscaneo(paginas){
     if (googleErr < ProbabilityGoogleErr){ //error de google
         demora = demora + minGoogleErr;
     }
-    let genericErr = randomWithMinaAndMax(0, 1);
-    if (genericErr < ProbabilityGenericErr){ //error x (afip, fe y r no aptos, etc)
-        demora = demora + obtenerDemora(fe2, r2, paginas);
+
+    if (huboError(fe1,r1)){ //error x (afip, fe y r no aptos, etc)
+        let dem = obtenerDemora(fe2, r2, paginas);
+        demora = demora + dem;
         googleErr = randomWithMinaAndMax(0, 1);
         if (googleErr < ProbabilityGoogleErr){ //error google
             demora = demora + minGoogleErr;
         }
-        genericErr = randomWithMinaAndMax(0, 1);
-        if (genericErr < ProbabilityGenericErr){ //error x (afip, fe y r no aptos, etc)
-            //no se puede escanear resultados manuales
+        if (huboError(fe2, r2)){ //error x (afip, fe y r no aptos, etc)
+            //resultados manuales
+            cantErr++;
+            costo += costoTarado
+        }else{
+            //se escanea con fe y r 2
+            cant2Ok++;
         }
+    }else{
+        //no hubo error
+        cant1Ok++;
     }
+    return demora;
     
 }
 
@@ -66,6 +81,12 @@ function randomCantidadComprobantesRecolectados(){
 function randomPaginasPorComprobantes(){
     //cantidad de paginas por comprobante devuelve un random entre 1 y 10
     randomWithMinaAndMax(1, 10)
+}
+
+function huboError(factorDeEscala,resolucion){ //TODO devuelva booleano
+    //factor de escala devuelve un random entre 0.5 y 1.5
+    randomWithMinaAndMax(factorDeEscala, resolucion)
+
 }
 
 function randomWithMinaAndMax(min, max) {

@@ -18,6 +18,6 @@ for (let i = 1; i < arrHilo.length; i++) {
         minValue = arrHilo[i].tiempoComprometido;
     }
 }
-return arrHilo[minIndex];
+return minIndex;
 }
 
