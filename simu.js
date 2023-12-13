@@ -10,10 +10,10 @@
   const costoTarado = 0.104;
 
   //variables de control
-  const fe1 = 0.5;
-  const fe2 = 1.5;
-  const r1 = 0.5;
-  const r2 = 1.5;
+  const fe1 = 2;
+  const fe2 = 3;
+  const r1 = 300;
+  const r2 = 400;
 
   //Tiempo de simulacion  
   const totalTime = 31536000; // un año en segs

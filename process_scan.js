@@ -1,6 +1,6 @@
 function procesarComprobantes(){
     t = t + tpe
-    trc = randomTiempoRecoleccionComprobantes();
+    let trc = randomTiempoRecoleccionComprobantes();
     tpe = trc + t;
 
     ccr = randomCantidadComprobantesRecolectados();
@@ -70,17 +70,17 @@ function obtenerDemora(factorDeEscala,resolucion, paginas){
 
 function randomTiempoRecoleccionComprobantes (){
     //tiempo de recoleccion de comprobantes devuelve un random entre 1 y 5 segundos
-    randomWithMinaAndMax(1, 5)
+    randomWithMinaAndMax(5*60, 6*60)
 }
 
 function randomCantidadComprobantesRecolectados(){
     //cantidad de comprobantes recolectados devuelve un random entre 1 y 1000
-    randomWithMinaAndMax(1, 1000)
+    randomWithMinaAndMax(400, 800)
 }
 
 function randomPaginasPorComprobantes(){
     //cantidad de paginas por comprobante devuelve un random entre 1 y 10
-    randomWithMinaAndMax(1, 10)
+    randomWithMinaAndMax(1, 3)
 }
 
 function huboError(factorDeEscala,resolucion){ //TODO devuelva booleano
