@@ -196,6 +196,7 @@ class Main {
     }
 
     private int randomCantidadComprobantesRecolectados() {
+
         return randomWithMinAndMax(400, 800);
     }
 
