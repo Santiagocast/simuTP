@@ -22,7 +22,7 @@ class Main {
     private  final int r2 = 400;
 
     // Tiempo de simulación
-    private  final int totalTime = 31536000; // un año en segs
+    private  final int totalTime = 31536000/6; // un año en segs
 
     // Datos de Google
     private  final double costoCloudFunction = 0.004;
@@ -62,9 +62,16 @@ class Main {
         // Imprimir resultados interpolados
         System.out.println("Resultados de la simulación\n");
         System.out.println("Costo: " + costo + "\n");
+
+        System.out.println("CANT1ok: " + cant1Ok + "\n");
+        System.out.println("CANT2ok: " + cant2Ok + "\n");
+        System.out.println("CANTERR: " + cantErr + "\n");
+        System.out.println("TOTAL COMPR: " + totalComprobantes + "\n");
+
         System.out.println("Porcentaje de comprobantes exitosos con la primera configuración: " + ((double) cant1Ok / totalComprobantes)*100 + "\n");
         System.out.println("Porcentaje de comprobantes exitosos con la segunda configuración: " + ((double) cant2Ok / totalComprobantes)*100 + "\n");
-        System.out.println("Porcentaje de comprobantes con error: " + ((double) cantErr / totalComprobantes) + "\n");
+        System.out.println("Porcentaje de comprobantes que no se pudo leer el QR: " + ((double) cantErr / totalComprobantes)*100 + "\n");
+
         System.out.println("Duración promedio de procesamiento de lectura de QR: " + (sumDemora / totalComprobantes) + " segundos\n");
         System.out.println("Duración promedio de carga de lote: " + ((double) sumDemoraLote / lhp) + " segundos\n");
         System.out.println("Cantidad de lotes procesados: " + lhp + "\n");
@@ -197,7 +204,19 @@ class Main {
     }
 
     private boolean huboError(int factorDeEscala, int resolucion) {
-        return randomWithMinAndMax(factorDeEscala, resolucion) < 300.0; // Devuelve booleano
+        double res = calcularFuncion(factorDeEscala* resolucion);
+        int r = randomWithMinAndMax(1, 100);
+        return r > res; // Devuelve booleano
+    }
+
+    public  double calcularFuncion(int x) {
+        // Calcular la inversa de la tangente
+        double arcTangent = Math.atan(x/100);
+
+        // Realizar las demás operaciones indicadas
+        double resultado = (arcTangent) * (160 / Math.PI);
+
+        return resultado;
     }
 
     private int randomWithMinAndMax(int min, int max) {
